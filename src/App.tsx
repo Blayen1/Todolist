@@ -1,77 +1,62 @@
-import React, { Fragment, useState } from "react";
-import "./App.css";
-import { Todolist } from "./Todolist";
+import React, {useState} from 'react';
+import { v1 } from 'uuid';
+import './App.css';
+import {Todolist} from './Todolist';
 
-export type FilterButtonNameType='active' | 'all' | 'completed'
-
+export type FilterValuesType = "all" | "active" | "completed";
 
 function App() {
 
- 
-  
-    const shapka1 = 'Tasks'
-    
+    let [tasks, setTasks] = useState([
+        { id: v1(), title: "HTML&CSS", isDone: true },
+        { id: v1(), title: "JS", isDone: true },
+        { id: v1(), title: "ReactJS", isDone: false },
+        { id: v1(), title: "Rest API", isDone: false },
+        { id: v1(), title: "GraphQL", isDone: false },
+    ]);
 
 
-    let  [tasks1 ,setTasks] = useState([
-      { id: 1, title: "HTML&CSS", isDone: true },
-      { id: 2, title: "JS", isDone: true },
-      { id: 3, title: "ReactJS", isDone: false },
-      { id: 4, title: "ReactJS", isDone: false }
-      
-      
-  ]
-)
-const removeTask = (taskId:number) =>{
-  
-  tasks1 = tasks1.filter(el => el.id !== taskId)
-  setTasks(tasks1)
-}
+    const addTask =(title:string) =>{
+        const newTask =   { id: v1(), title:title, isDone: false }
+        setTasks([newTask,...tasks])
+        
+        
+    }
 
+   
 
+    function removeTask(id: string) {
+        let filteredTasks = tasks.filter(t => t.id != id);
+        setTasks(filteredTasks);
+    }
 
+    let [filter, setFilter] = useState<FilterValuesType>("all");
 
+    let tasksForTodolist = tasks;
 
-  return (
-    <div className="App">
-      <Todolist 
-      shapka1={shapka1} 
-      tasks={durshlag}
-      removeTask={removeTask}
-      tasksButton={tasksButton}
-      />
+    if (filter === "active") {
+        tasksForTodolist = tasks.filter(t => t.isDone === false);
+    }
+    if (filter === "completed") {
+        tasksForTodolist = tasks.filter(t => t.isDone === true);
+    }
 
-      
-    </div>
+    function changeFilter(value: FilterValuesType) {
+        setFilter(value);
+    }
 
-
-  );
+    return (
+        <div className="App">
+            <Todolist title="What to learn"
+                      tasks={tasksForTodolist}
+                      removeTask={removeTask}
+                      changeFilter={changeFilter}
+                      addTask={addTask}
+                     // onChangeHandler={onChangeHandler}
+                      />
+        </div>
+    );
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
