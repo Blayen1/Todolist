@@ -17,12 +17,14 @@ function App() {
 
 
     const addTask =(title:string) =>{
-        const newTask =   { id: v1(), title:title, isDone: false }
+        const newTask =  { id: v1(), title:title, isDone: false }
         setTasks([newTask,...tasks])
-        
-        
     }
 
+    const changeStatus= (taskID:string,eventStatus:boolean) =>{
+        setTasks(tasks.map(el => el.id === taskID ? {...el,isDone:eventStatus}:el))
+        
+    }
    
 
     function removeTask(id: string) {
@@ -52,11 +54,15 @@ function App() {
                       removeTask={removeTask}
                       changeFilter={changeFilter}
                       addTask={addTask}
-                     // onChangeHandler={onChangeHandler}
+                      changeStatus={changeStatus}
+                     //onChangeHandler={onChangeHandler}
                       />
         </div>
     );
 }
 
 export default App;
+
+
+
 
